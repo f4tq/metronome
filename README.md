@@ -7,6 +7,8 @@ You can pass all configuration properties via environment variables, but with `_
 
 The current list of configuration properties is:
 
+There are many options understood by metronome.  The following is an incomplete list:
+
 ```
 metronome.framework.name
 metronome.mesos.master.url
@@ -43,6 +45,25 @@ metronome.leader.proxy.timeout
 metronome.akka.actor.startup.max
 ```
 
+There are 2 ways to set these variables using this container:
+
+- JAVA_OPTS
+```
+docker run -e JAVA_OPTS="-Dmetronome.zk.url=zk://localhost:2181/metronome -Dmetronome.mesos.master.url=localhost:5050 f4tq/metronome:0.9.1
+```
+- individual environment variables that are transformed into the above notation
+```
+docker run -e METRONOME_ZK_URL=zk://localhost:2181/metronome -e METRONOME_MESOS_MASTER_URL=localhost:5050 f4tq/metronome:0.9.1
+```
+- to override the entrypoint in this release and run metronome directly, run:
+```
+docker run -i --rm --entryppoint /bin/bash -t f4tq/metronome:0.9.1 /app/metronome-0.1.9/bin/metronome -Dmetronome.mesos.master.url=localhost:5050 -Dmetronome.zk.url=zk://localhost:2181/metronome -Dmetronome.play.server.http_port=9000 
+```
+
+> Note: metronome is based on the [play framework](https://www.playframework.com): There are **many** more options that can be passed via the command that relate to play; so many in fact that metronone takes -Duser.dir=X where X should contain a `X/conf` directory with `application.conf` contained within.  Mesos takes the `-Duser.dir` approach.
+
+ 
+
 ### Start with Marathon
 
 At minimum, you need to specify `metronome_mesos_master_url` and `metronome_zk_url` in an equivalent way as outlined below.
@@ -58,7 +79,7 @@ At minimum, you need to specify `metronome_mesos_master_url` and `metronome_zk_u
     "type": "DOCKER",
     "volumes": [],
     "docker": {
-      "image": "mesoshq/metronome:0.1.9",
+      "image": "f4tq/metronome:0.1.9",
       "network": "HOST",
       "privileged": false,
       "parameters": [],

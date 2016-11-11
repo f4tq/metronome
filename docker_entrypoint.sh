@@ -15,11 +15,16 @@ function read_env {
 # Get all interesting env variables
 read_env
 
+PORTS=""
+if [ ! -z "$PORT0" ]; then
+    PORTS="-Dplay.server.http.port=$PORT0"
+fi
+
 # Set http port from $PORT0 and set JAVA_OPTS
-export JAVA_OPTS=$opts-Dplay.server.http.port=$PORT0
+export JAVA_OPTS="$JAVA_OPTS $opts $PORTS"
 
 # Debug info
 echo $JAVA_OPTS
 
 # Start metronome
-$APP_DIR/metronome-0.1.7-SNAPSHOT/bin/metronome
+$APP_DIR/metronome-${METRONOME_VERSION}/bin/metronome $JAVA_OPTS
