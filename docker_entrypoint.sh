@@ -27,4 +27,4 @@ export JAVA_OPTS="$JAVA_OPTS $opts $PORTS"
 echo $JAVA_OPTS
 
 # Start metronome
-$APP_DIR/metronome-${METRONOME_VERSION}/bin/metronome $JAVA_OPTS
+$APP_DIR/metronome-${METRONOME_VERSION}*/bin/metronome $JAVA_OPTS
